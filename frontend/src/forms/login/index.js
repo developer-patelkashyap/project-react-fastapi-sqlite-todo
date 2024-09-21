@@ -1,5 +1,8 @@
 import { useState } from "react";
 
+// react router
+import { useNavigate } from 'react-router-dom';
+
 // material ui
 import Alert from "@mui/material/Alert";
 import Avatar from "@mui/material/Avatar";
@@ -19,6 +22,8 @@ import Container from "@mui/material/Container";
 import { login } from "../../services/user";
 
 export default function LoginForm() {
+  const navigate = useNavigate();
+
   const [open, setOpen] = useState(true);
   const [invalidCredentials, setInvalidCredentials] = useState(false);
   const [invalidCredentialMessage, setInvalidCredentialMessage] =
@@ -42,10 +47,14 @@ export default function LoginForm() {
     const responseStatus = await login({ email, password });
 
     if (responseStatus === 200) {
-      //
+      navigate('/todo');
     } else if (responseStatus === 401) {
       setInvalidCredentials(true);
-      setInvalidCredentialMessage("Invalid Credentials");
+      setInvalidCredentialMessage("Invalid Credentials!");
+      setOpen(true);
+    } else {
+      setInvalidCredentials(true);
+      setInvalidCredentialMessage("Please Try Again Later.");
       setOpen(true);
     }
   };

@@ -1,5 +1,8 @@
 import { useState } from "react";
 
+// react router
+import { useNavigate } from 'react-router-dom';
+
 // material ui
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -10,6 +13,11 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 // services
 import { register } from "../../services/user";
@@ -22,6 +30,8 @@ import {
 } from "../../utils/password";
 
 export default function RegistrationForm() {
+  const navigate = useNavigate();
+
   const [firstName, setFirstName] = useState("");
   const [firstNameError, setFirstNameError] = useState(false);
 
@@ -33,6 +43,10 @@ export default function RegistrationForm() {
 
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState(false);
+
+  const [formError, setFormError] = useState("");
+
+  const [open, setOpen] = useState(false);
 
   const handleFirstNameChange = (e) => {
     setFirstName(e.target.value);
@@ -75,6 +89,10 @@ export default function RegistrationForm() {
     }
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -86,16 +104,32 @@ export default function RegistrationForm() {
       password,
     };
 
-    console.log(userData);
+    const response = await register(userData);
 
-    const responseStatus = await register(userData);
-
-    // if (responseStatus === 200) {
-    // } else if (responseStatus === 401) {
-    // }
+    if (response.status === 200) {
+      navigate('/');
+    } else if (response.status !== 200) {
+      setFormError(response.detail);
+      setOpen(true);
+    }
   };
   return (
     <Container component="main" maxWidth="xs">
+      <Dialog
+        open={open}
+        keepMounted
+        onClose={handleClose}
+      >
+        <DialogTitle><span style={{color: 'red', fontSize: 'xx-large', fontWeight: 'bold'}}>Issue While Registering</span></DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {formError}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>OK</Button>
+        </DialogActions>
+      </Dialog>
       <Box
         sx={{
           marginTop: 8,

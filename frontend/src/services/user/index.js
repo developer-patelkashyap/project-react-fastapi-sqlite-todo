@@ -17,7 +17,6 @@ export const login = async (data) => {
   const responseData = await response.json();
 
   if (!response.ok) {
-    console.error(responseData?.detail);
     return response.status;
   } else {
     setToken(responseData);
@@ -39,10 +38,9 @@ export const register = async (data) => {
   const responseData = await response.json();
 
   if (!response.ok) {
-    console.error(responseData?.detail);
-    return response.status;
+    return { status: response.status, detail: responseData?.detail };
   } else {
     setToken(responseData);
-    return response.status;
+    return { status: response.status };
   }
 };
