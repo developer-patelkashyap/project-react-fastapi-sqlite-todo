@@ -1,0 +1,30 @@
+#NavContainer {
+  padding: 5px;
+  margin-bottom: 10px;
+
+  /* border: 1px solid black; */
+  /* border-radius: 5px; */
+
+  display: grid;
+
+  grid-template-areas: "NavHeader NavAddTodo NavLogout";
+
+  grid-template-columns: 10fr 1fr 1fr;
+}
+
+#NavHeading {
+  font-size: xx-large;
+  grid-area: NavHeader;
+}
+
+#NavAddTodo {
+  grid-area: NavAddTodo;
+  justify-self: end;
+  /* align-self: center; */
+}
+
+#NavLogout {
+  grid-area: NavLogout;
+  justify-self: end;
+  /* align-self: center; */
+}
